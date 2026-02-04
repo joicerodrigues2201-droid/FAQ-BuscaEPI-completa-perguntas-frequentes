@@ -218,6 +218,7 @@
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -236,7 +237,45 @@
     </div>
 
     <!-- SEÇÃO 1: VALIDADE JURÍDICA E SEGURANÇA -->
-    <div class="faq-section">
+        <!-- PERGUNTAS MAIS ACESSADAS -->
+    <div class="faq-section" style="margin-bottom: 30px;">
+        <div class="section-header">
+            <span class="section-icon">🔥</span>
+            <h2 class="section-title">Perguntas Mais Acessadas</h2>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #fff5f5 0%, #feeded 100%); padding: 25px; border-radius: 12px; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 0.95rem;">
+                📊 Ranking das perguntas mais consultadas (atualiza automaticamente conforme uso)
+            </p>
+            
+            <div style="max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <canvas id="topQuestionsChart" style="max-height: 400px;"></canvas>
+            </div>
+            
+            <div id="topQuestionsList" style="margin-top: 25px; background: white; padding: 20px; border-radius: 8px;">
+                <h3 style="color: #c0392b; font-size: 1.1rem; margin-bottom: 15px; text-align: center;">
+                    🏆 Top 10 Perguntas Mais Acessadas
+                </h3>
+                <div id="topQuestionsListContent">
+                    <p style="text-align: center; color: #999; padding: 20px;">
+                        📌 Clique nas perguntas abaixo para começar a gerar o ranking...
+                    </p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                <button onclick="resetQuestionClicks()" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-right: 10px; transition: all 0.3s;" onmouseover="this.style.background='#5a6268'" onmouseout="this.style.background='#6c757d'">
+                    🗑️ Limpar Estatísticas
+                </button>
+                <button onclick="atualizarTopQuestions()" style="background: var(--primary-red); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='#a02d22'" onmouseout="this.style.background='var(--primary-red)'">
+                    🔄 Atualizar Ranking
+                </button>
+            </div>
+        </div>
+    </div>
+
+<div class="faq-section">
         <div class="section-header">
             <span class="section-icon">⚖️</span>
             <h2 class="section-title">Validade Jurídica e Segurança</h2>
@@ -345,7 +384,7 @@
             <details>
                 <summary>O sistema está em conformidade com a LGPD?</summary>
                 <div class="answer">
-                    <p><strong>Sim.</strong> O BuscaEPI está em processo de certificação ISO 27001 + ISO 27701/LGPD (15% concluído conforme atestado de 05/01/2026).</p>
+                    <p><strong>Sim.</strong> O BuscaEPI está em processo de certificação ISO 27001 + ISO 27701/LGPD (20% concluído conforme atestado de 29/01/2026).</p>
                     <p><strong>Medidas de proteção:</strong></p>
                     <ul>
                         <li>Todos os dados sensíveis são criptografados</li>
@@ -671,9 +710,22 @@
             <details>
                 <summary>O colaborador pode fazer requisição de EPI pelo sistema?</summary>
                 <div class="answer">
-                    <p><strong>Atualmente não.</strong> O sistema foi desenvolvido para que o responsável pela segurança do trabalho faça as entregas.</p>
-                    <p><strong>Teste disponível:</strong> Podemos liberar acesso teste de até 15 dias para avaliar um fluxo de requisição. Para isso, é necessário que um responsável da empresa assine um termo de consentimento de uso de licença teste.</p>
-                    <p>Entre em contato com o vendedor que está atendendo sua empresa para avaliar esta funcionalidade.</p>
+                    <p><strong>Atualmente, pelo sistema web, não.</strong> O sistema web foi desenvolvido para que o responsável pela segurança do trabalho faça as entregas.</p>
+                    
+                    <p><strong>📱 App do Colaborador:</strong></p>
+                    <p>Possuímos um <span class="highlight">aplicativo mobile para colaboradores</span> que está sendo modernizado! Em breve, o colaborador poderá:</p>
+                    <ul>
+                        <li>✅ Realizar requisição de EPIs diretamente pelo app</li>
+                        <li>✅ Solicitar apenas EPIs vinculados à sua matriz (função/setor/GHE)</li>
+                        <li>✅ Acompanhar status das requisições</li>
+                        <li>✅ Visualizar histórico de entregas</li>
+                    </ul>
+                    
+                    <p><strong>🧪 Teste disponível:</strong></p>
+                    <p>Podemos liberar acesso teste de até <strong>15 dias</strong> para avaliar o fluxo de requisição. Para isso, é necessário que um responsável da empresa assine um termo de consentimento de uso de licença teste.</p>
+                    
+                    <p><strong>📞 Interessado?</strong></p>
+                    <p>Entre em contato com o vendedor que está atendendo sua empresa ou envie e-mail para <a href="mailto:suporte@buscaepi.com" style="color: #c0392b; text-decoration: none; font-weight: 600;">suporte@buscaepi.com</a> para avaliar esta funcionalidade.</p>
                 </div>
             </details>
         </div>
@@ -843,8 +895,8 @@
                     </ul>
 
                     <div class="highlight">
-                        <p><strong>💡 Exemplo Real de Economia:</strong></p>
-                        <p>Empresa com 500 colaboradores identificou através do BuscaEPI que 15% das trocas de botinas eram antecipadas. Investigação mostrou uso inadequado de botinas para atividades não previstas. Ações corretivas (treinamento + fornecimento de EPI específico) resultaram em economia de <strong>R$ 45.000/ano apenas neste item</strong>.</p>
+                        <p><strong>💡 Exemplo de Economia Possível:</strong></p>
+                        <p>Uma empresa com 500 colaboradores pode identificar através do BuscaEPI que 15% das trocas de botinas são antecipadas. Com os dados do sistema, é possível investigar e descobrir uso inadequado de botinas para atividades não previstas. Ações corretivas (treinamento + fornecimento de EPI específico) podem resultar em economia de até <strong>R$ 45.000/ano apenas neste item</strong>.</p>
                     </div>
                 </div>
             </details>
@@ -1128,7 +1180,7 @@
                     
                     <p><strong>🚀 Como habilitar Webhook:</strong></p>
                     <ol>
-                        <li>Envie e-mail para <strong><a href="mailto:suporte@buscaepi.com">suporte@buscaepi.com</a></strong> solicitando habilitação</li>
+                        <li>Envie e-mail para <strong><a href="mailto:suporte@buscaepi.com" style="color: #c0392b; text-decoration: none; font-weight: 600;">suporte@buscaepi.com</a></strong> solicitando habilitação</li>
                         <li>Informe a URL do seu endpoint que receberá as notificações (HTTP POST)</li>
                         <li>Opcionalmente, informe header de autorização (token Bearer ou API key)</li>
                         <li>Configure seu endpoint para retornar HTTP 200 OK ao receber notificações</li>
@@ -1218,7 +1270,7 @@
                     <ol>
                         <li>Prepare um <strong>endpoint HTTPS</strong> no seu sistema que aceite POST com JSON</li>
                         <li>Configure o endpoint para processar os dados e retornar <strong>HTTP 200 OK</strong></li>
-                        <li>Envie e-mail para <strong><a href="mailto:suporte@buscaepi.com">suporte@buscaepi.com</a></strong> informando:
+                        <li>Envie e-mail para <strong><a href="mailto:suporte@buscaepi.com" style="color: #c0392b; text-decoration: none; font-weight: 600;">suporte@buscaepi.com</a></strong> informando:
                             <ul>
                                 <li>URL do endpoint</li>
                                 <li>Header de autorização (opcional, ex: Bearer token)</li>
@@ -1511,7 +1563,7 @@
                 <div class="answer">
                     <p><strong>Canais de atendimento:</strong></p>
                     <ul>
-                        <li>📧 <strong>E-mail:</strong> <a href="mailto:suporte@buscaepi.com">suporte@buscaepi.com</a> (tickets)</li>
+                        <li>📧 <strong>E-mail:</strong> <a href="mailto:suporte@buscaepi.com" style="color: #c0392b; text-decoration: none; font-weight: 600;">suporte@buscaepi.com</a> (tickets)</li>
                         <li>📱 <strong>WhatsApp:</strong> (41) 93500-1356</li>
                         <li>📚 <strong>Central de Ajuda:</strong> Base de conhecimento 24/7</li>
                     </ul>
@@ -1869,12 +1921,437 @@
 
 </div>
 
+    <!-- ESTATÍSTICAS DO FAQ -->
+    <div class="faq-section" style="margin-bottom: 50px;">
+        <div class="section-header">
+            <span class="section-icon">📊</span>
+            <h2 class="section-title">Estatísticas do FAQ</h2>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 30px; border-radius: 12px; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 0.95rem;">
+                📈 Visualize a distribuição de perguntas por categoria
+            </p>
+            
+            <div style="max-width: 700px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <canvas id="faqChart" style="max-height: 400px;"></canvas>
+            </div>
+            
+            <div id="statsNumbers" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 30px;">
+                <!-- Cards serão inseridos aqui -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                <button onclick="criarGraficoCategorias()" style="background: var(--primary-red); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='#a02d22'" onmouseout="this.style.background='var(--primary-red)'">
+                    🔄 Atualizar Estatísticas
+                </button>
+            </div>
+        </div>
+    </div>
+
+<script>
+console.log('🚀 FAQ BuscaEPI - Iniciando...');
+
+// ============================================
+// VARIÁVEIS GLOBAIS
+// ============================================
+let questionClicks = {};
+let categoriesChart = null;
+let topChart = null;
+
+// ============================================
+// INICIALIZAÇÃO
+// ============================================
+window.addEventListener('load', function() {
+    console.log('✅ Página carregada');
+    
+    if (typeof Chart === 'undefined') {
+        console.error('❌ Chart.js não carregou!');
+        alert('ERRO: Chart.js não carregou. Verifique sua conexão com a internet.');
+        return;
+    }
+    
+    console.log('✅ Chart.js disponível');
+    
+    // Aguardar um pouco e inicializar
+    setTimeout(function() {
+        inicializarTudo();
+    }, 500);
+});
+
+function inicializarTudo() {
+    console.log('📊 Inicializando sistema...');
+    
+    // Gráfico de categorias
+    criarGraficoCategorias();
+    
+    // Sistema de tracking
+    inicializarTracking();
+    
+    console.log('✅ Sistema inicializado!');
+}
+
+// ============================================
+// GRÁFICO DE CATEGORIAS
+// ============================================
+function criarGraficoCategorias() {
+    console.log('📊 Criando gráfico de categorias...');
+    
+    const canvas = document.getElementById('faqChart');
+    if (!canvas) {
+        console.error('❌ Canvas não encontrado!');
+        return;
+    }
+    
+    // Coletar dados
+    const sections = document.querySelectorAll('.faq-section');
+    const categorias = [];
+    const quantidades = [];
+    let total = 0;
+    
+    sections.forEach(section => {
+        const title = section.querySelector('.section-title');
+        if (!title) return;
+        
+        const nome = title.textContent.trim();
+        
+        // Pular seções especiais
+        if (nome === 'Estatísticas do FAQ' || nome === 'Perguntas Mais Acessadas') {
+            return;
+        }
+        
+        const perguntas = section.querySelectorAll('.faq-item');
+        const qtd = perguntas.length;
+        
+        if (qtd > 0) {
+            categorias.push(nome);
+            quantidades.push(qtd);
+            total += qtd;
+        }
+    });
+    
+    console.log('📈 Total de perguntas:', total);
+    console.log('📈 Categorias:', categorias.length);
+    
+    // Destruir gráfico anterior
+    if (categoriesChart) {
+        categoriesChart.destroy();
+    }
+    
+    // Criar gráfico
+    const ctx = canvas.getContext('2d');
+    
+    categoriesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: categorias,
+            datasets: [{
+                label: 'Perguntas',
+                data: quantidades,
+                backgroundColor: [
+                    'rgba(192, 57, 43, 0.8)',
+                    'rgba(0, 102, 255, 0.8)',
+                    'rgba(39, 174, 96, 0.8)',
+                    'rgba(243, 156, 18, 0.8)',
+                    'rgba(142, 68, 173, 0.8)',
+                    'rgba(22, 160, 133, 0.8)'
+                ],
+                borderColor: [
+                    'rgb(192, 57, 43)',
+                    'rgb(0, 102, 255)',
+                    'rgb(39, 174, 96)',
+                    'rgb(243, 156, 18)',
+                    'rgb(142, 68, 173)',
+                    'rgb(22, 160, 133)'
+                ],
+                borderWidth: 2,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '📊 Perguntas por Categoria',
+                    font: { size: 18, weight: 'bold' },
+                    padding: 20
+                },
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            return Number.isInteger(value) ? value : '';
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    console.log('✅ Gráfico de categorias criado!');
+    
+    // Criar cards
+    criarCards(total, categorias.length);
+}
+
+function criarCards(total, numCategorias) {
+    const container = document.getElementById('statsNumbers');
+    if (!container) return;
+    
+    const media = (total / numCategorias).toFixed(1);
+    
+    container.innerHTML = `
+        <div style="background: linear-gradient(135deg, #fef5f5 0%, #fee 100%); padding: 20px; border-radius: 10px; text-align: center; border-left: 4px solid #c0392b; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="font-size: 32px; margin-bottom: 8px;">📋</div>
+            <div style="font-size: 36px; font-weight: bold; color: #c0392b; margin-bottom: 5px;">${total}</div>
+            <div style="font-size: 13px; color: #666; font-weight: 500;">Total de Perguntas</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%); padding: 20px; border-radius: 10px; text-align: center; border-left: 4px solid #0066FF; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="font-size: 32px; margin-bottom: 8px;">📂</div>
+            <div style="font-size: 36px; font-weight: bold; color: #0066FF; margin-bottom: 5px;">${numCategorias}</div>
+            <div style="font-size: 13px; color: #666; font-weight: 500;">Categorias</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); padding: 20px; border-radius: 10px; text-align: center; border-left: 4px solid #27ae60; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="font-size: 32px; margin-bottom: 8px;">📊</div>
+            <div style="font-size: 36px; font-weight: bold; color: #27ae60; margin-bottom: 5px;">${media}</div>
+            <div style="font-size: 13px; color: #666; font-weight: 500;">Média por Categoria</div>
+        </div>
+    `;
+    
+    console.log('✅ Cards criados!');
+}
+
+// ============================================
+// TRACKING DE PERGUNTAS
+// ============================================
+function inicializarTracking() {
+    console.log('🔥 Inicializando tracking...');
+    
+    // Carregar dados
+    try {
+        const saved = localStorage.getItem('faq_clicks');
+        if (saved) {
+            questionClicks = JSON.parse(saved);
+            console.log('✅ Dados carregados:', Object.keys(questionClicks).length, 'perguntas');
+        }
+    } catch (e) {
+        console.log('ℹ️  Sem dados salvos');
+    }
+    
+    // Adicionar listeners
+    const allDetails = document.querySelectorAll('.faq-item details');
+    console.log('📌 Adicionando tracking a', allDetails.length, 'perguntas');
+    
+    allDetails.forEach((detail, index) => {
+        const summary = detail.querySelector('summary');
+        if (!summary) return;
+        
+        const texto = summary.textContent.trim();
+        const id = 'q' + index;
+        
+        detail.addEventListener('toggle', function() {
+            if (this.open) {
+                registrarClick(id, texto);
+            }
+        });
+    });
+    
+    // Atualizar se houver dados
+    if (Object.keys(questionClicks).length > 0) {
+        atualizarTopQuestions();
+    }
+    
+    console.log('✅ Tracking inicializado!');
+}
+
+function registrarClick(id, texto) {
+    if (!questionClicks[id]) {
+        questionClicks[id] = { texto: texto, clicks: 0 };
+    }
+    
+    questionClicks[id].clicks++;
+    console.log('👆 Click:', texto);
+    
+    // Salvar
+    try {
+        localStorage.setItem('faq_clicks', JSON.stringify(questionClicks));
+    } catch (e) {
+        console.error('Erro ao salvar:', e);
+    }
+    
+    // Atualizar
+    atualizarTopQuestions();
+}
+
+function atualizarTopQuestions() {
+    const top = Object.values(questionClicks)
+        .sort((a, b) => b.clicks - a.clicks)
+        .slice(0, 10);
+    
+    if (top.length === 0) return;
+    
+    console.log('🔥 Atualizando top', top.length, 'perguntas');
+    
+    // Atualizar lista
+    const container = document.getElementById('topQuestionsListContent');
+    if (container) {
+        let html = '<div style="display: flex; flex-direction: column; gap: 10px;">';
+        
+        const medals = ['🥇', '🥈', '🥉'];
+        const colors = ['#c0392b', '#e67e22', '#f39c12', '#95a5a6'];
+        const bgs = ['#fff5f5', '#fff9f5', '#fffbf5', '#f8f9fa'];
+        
+        top.forEach((q, i) => {
+            const medal = i < 3 ? medals[i] : '📌';
+            const color = colors[Math.min(i, 3)];
+            const bg = bgs[Math.min(i, 3)];
+            
+            html += `
+                <div style="padding: 12px 15px; background: ${bg}; border-radius: 8px; border-left: 4px solid ${color}; display: flex; justify-content: space-between; align-items: center; gap: 10px; transition: transform 0.2s;" onmouseover="this.style.transform='translateX(5px)'" onmouseout="this.style.transform='translateX(0)'">
+                    <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;">
+                        <span style="font-size: 1.3rem; flex-shrink: 0;">${medal}</span>
+                        <span style="color: #2c3e50; font-weight: ${i < 3 ? '600' : 'normal'}; overflow: hidden; text-overflow: ellipsis;">${q.texto}</span>
+                    </div>
+                    <span style="background: ${color}; color: white; padding: 5px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; white-space: nowrap; flex-shrink: 0;">
+                        ${q.clicks}
+                    </span>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        container.innerHTML = html;
+    }
+    
+    // Criar gráfico
+    const canvas = document.getElementById('topQuestionsChart');
+    if (!canvas) return;
+    
+    if (topChart) {
+        topChart.destroy();
+    }
+    
+    const ctx = canvas.getContext('2d');
+    
+    topChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: top.map((q, i) => (i + 1) + 'º'),
+            datasets: [{
+                label: 'Acessos',
+                data: top.map(q => q.clicks),
+                backgroundColor: 'rgba(192, 57, 43, 0.8)',
+                borderColor: 'rgb(192, 57, 43)',
+                borderWidth: 2,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '🔥 Top 10 Perguntas Mais Acessadas',
+                    font: { size: 16, weight: 'bold' },
+                    padding: 20
+                },
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+    });
+    
+    console.log('✅ Top questions atualizado!');
+}
+
+function resetQuestionClicks() {
+    if (!confirm('⚠️ Limpar todas as estatísticas?\n\nEsta ação não pode ser desfeita.')) {
+        return;
+    }
+    
+    questionClicks = {};
+    localStorage.removeItem('faq_clicks');
+    
+    if (topChart) {
+        topChart.destroy();
+        topChart = null;
+    }
+    
+    const container = document.getElementById('topQuestionsListContent');
+    if (container) {
+        container.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">📌 Clique nas perguntas para gerar estatísticas</p>';
+    }
+    
+    alert('✅ Estatísticas limpas!');
+    console.log('🗑️  Dados resetados');
+}
+
+// ============================================
+// BUSCA
+// ============================================
+function searchFAQ() {
+    const input = document.getElementById('searchInput');
+    if (!input) return;
+    
+    const filter = input.value.toLowerCase().trim();
+    const sections = document.getElementsByClassName('faq-section');
+    
+    for (let section of sections) {
+        const items = section.getElementsByClassName('faq-item');
+        let sectionHasMatch = false;
+        
+        for (let item of items) {
+            const details = item.querySelector('details');
+            if (!details) continue;
+            
+            const summary = details.querySelector('summary');
+            const answer = details.querySelector('.answer');
+            
+            if (!summary) continue;
+            
+            let text = summary.textContent || '';
+            if (answer) {
+                text += ' ' + answer.textContent;
+            }
+            
+            if (filter === '' || text.toLowerCase().indexOf(filter) > -1) {
+                item.style.display = '';
+                sectionHasMatch = true;
+            } else {
+                item.style.display = 'none';
+            }
+        }
+        
+        if (sectionHasMatch || filter === '') {
+            section.style.display = '';
+        } else {
+            section.style.display = 'none';
+        }
+    }
+}
+
+console.log('✅ Script pronto!');
+</script>
+
 <footer>
     <p style="margin-top: 20px;">© 2026 BuscaEPI - Gestão Inteligente de Segurança do Trabalho.<br>
     <small>Todos os direitos reservados.</small></p>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 function searchFAQ() {
     const input = document.getElementById('searchInput');
     if (!input) return;
@@ -1960,21 +2437,4 @@ function searchFAQ() {
         }
     }
     
-    console.log(`Busca: "${filter}" - ${totalMatches} resultado(s)`);
-}
-
-// Garantir que a função seja chamada quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        console.log('Buscador inicializado com sucesso!');
-        // Adicionar event listener adicional
-        searchInput.addEventListener('input', searchFAQ);
-    } else {
-        console.error('Input de busca não encontrado!');
-    }
-});
-</script>
-
-</body>
-</html>
+    console.log(`Busca: "${filter}" -
